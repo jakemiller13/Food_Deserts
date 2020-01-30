@@ -82,7 +82,7 @@ def logistic_reg(X, y):
     logr.fit(X_train, y_train.to_numpy().ravel())
     
     # Check score for sanity
-    print('\nLogistic regression score: {}%'.
+    print('Logistic regression score: {}%'.
           format(100 * round(logr.score(X_test, y_test), 4)))
     
     # Check coefficients
