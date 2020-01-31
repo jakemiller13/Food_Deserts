@@ -102,3 +102,13 @@ def logistic_reg(X, y):
 
 logistic_reg(X, la_y)
 logistic_reg(X, lila_y)
+
+# Run logistic regression with only races/nationalities
+nat_features = ['lawhite1share', 'lablack1share', 'laasian1share',
+                'lanhopi1share', 'laaian1share', 'laomultir1share',
+                'lahisp1share', 'LILATracts_1And10']
+nat_df = df[nat_features]
+nat_X = pd.DataFrame(nat_df[nat_df.columns[:-1]])
+nat_y = pd.DataFrame(nat_df[nat_df.columns[-1]])
+logistic_reg(nat_X, nat_y, test_size = 0.2, max_iters = 500,
+             n_top = len(nat_features) - 1)
