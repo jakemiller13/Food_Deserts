@@ -93,12 +93,12 @@ def logistic_reg(X, y):
     print(logr.intercept_[0])
     
     # Top 3 high impact regressor variables
-    title_print('High regressors')
+    title_print('Top regressors')
     high_reg = abs(coeff).nlargest(n = 3, columns = 'Coefficient').index
     for i in high_reg:
-        print()
         print(variables[variables['Field'] == i]['Description'].values[0] +
               ':\n' + str(round(coeff.loc[i][0], 4)))
+        print()
 
 logistic_reg(X, la_y)
 logistic_reg(X, lila_y)
