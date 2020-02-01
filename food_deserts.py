@@ -67,18 +67,24 @@ X = pd.DataFrame(df[df.columns[:-2]])
 la_y = pd.DataFrame(df[df.columns[-2]])
 lila_y = pd.DataFrame(df[df.columns[-1]])
 
-def logistic_reg(X, y):
+def logistic_reg(X, y, test_size, max_iters, n_top):
     '''
     Performs logistic regression on X, y
+        X: regressor (independent) variables
+        y: response variable
+        test_size (float): 0-1, ratio of test set
+        max_iters (int): max iterations to run until convergence
+        n_top (int): number of top coefficients to print out after running regression
     '''
     title_print(y.columns[0])
+    
     # Split train/test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                        test_size = 0.2,
+                                                        test_size = test_size,
                                                         random_state = 42)
     
     # Create model
-    logr = LogisticRegression(max_iter = 500)
+    logr = LogisticRegression(max_iter = max_iters)
     logr.fit(X_train, y_train.to_numpy().ravel())
     
     # Check score for sanity
@@ -92,16 +98,16 @@ def logistic_reg(X, y):
     title_print('Intercept')
     print(logr.intercept_[0])
     
-    # Top 3 high impact regressor variables
+    # Top n high impact regressor variables
     title_print('Top regressors')
-    high_reg = abs(coeff).nlargest(n = 3, columns = 'Coefficient').index
+    high_reg = abs(coeff).nlargest(n = n_top, columns = 'Coefficient').index
     for i in high_reg:
         print(variables[variables['Field'] == i]['Description'].values[0] +
               ':\n' + str(round(coeff.loc[i][0], 4)))
         print()
 
-logistic_reg(X, la_y)
-logistic_reg(X, lila_y)
+logistic_reg(X, la_y, test_size = 0.2, max_iters = 500, n_top = 5)
+logistic_reg(X, lila_y, test_size = 0.2, max_iters = 500, n_top = 5)
 
 # Run logistic regression with only races/nationalities
 nat_features = ['lawhite1share', 'lablack1share', 'laasian1share',
